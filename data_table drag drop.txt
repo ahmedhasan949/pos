@@ -1,0 +1,355 @@
+
+//    $(document).ready(function () {
+//         
+//        
+//      //<----------------- DISPLAY ALL SERVICE BASED ON PRODUCT ID ----------------> 
+//         var packg_all_service = $('#packg_all_service').DataTable({
+//            "ajax": {
+//                "url": "<?php //echo site_url($this->uri->segment(1).'/service_frm_product'); ?>",
+//                "method": "POST",
+//                "data": function (d) { 
+//                    d.product_ids = $(".product").val(); 
+//                }
+//            },
+//            "responsive": false,
+//            "searching": false,
+//            "ordering": false,
+//            "paging": false,
+//            columns: [{
+//                    data: 'service_name'                    
+//                }]
+//        });  
+//        
+//        
+//      //<----------------- DISPLAY ALL ADDON BASED ON PRODUCT ID ----------------> 
+//         var pckg_all_addon = $('#pckg_all_addon').DataTable({
+//            "ajax": {
+//                "url": "<?php echo site_url($this->uri->segment(1).'/addon_frm_product'); ?>",
+//                "method": "POST",
+//                "data": function (d) { 
+//                    d.product_ids = $(".product").val(); 
+//                }
+//            },
+//            "responsive": false,
+//            "searching": false,
+//            "ordering": false,
+//            "paging": false,
+//            columns: [{
+//                data: 'addon_name'                    
+//            }]
+//        });  
+//        
+//        
+//        $('#products').on('change', function (e) {             
+//            packg_all_service.ajax.reload(); 
+//            pckg_all_addon.ajax.reload();
+//        }); 
+//        
+//        
+//        
+////<-------------------------------------------------------------------------------------------------------------------------------------------------------->  
+//        
+//        
+//         
+//     //<------------------- DRAG AND DROP SERVICES---------------------->
+//        packg_all_service.rowReordering();
+//        
+//        packg_all_service.on('mousedown', 'tbody tr', function () {
+//            var $row = $(this);
+//            var r = packg_all_service.rows(function (i, data) {                
+//                return data.service_name == $row.children().first().text();
+//            });
+//            if (r[0].length > 1)
+//                r = r.rows(r[0][0]);
+//            rowCache_service.push({selector: 'packg_all_service', row: r});
+//        });        
+//        packg_all_service.on('mouseup', service_mouseUp);
+//         packg_all_service.on('mouseup', addon_mouseUp);
+//     //<-------------------- DRAG AND DROP SERVICES---------------------->
+//     
+//     
+//     //<------------------- DRAG AND DROP ADDON---------------------->
+////        pckg_all_addon.rowReordering();
+////        
+////        pckg_all_addon.on('mousedown', 'tbody tr', function () {
+////            var $row_adon = $(this);
+////            var r_adon = pckg_all_addon.rows(function (i, data) {                
+////                return data.addon_name == $row_adon.children().first().text();
+////            });
+////            if (r_adon[0].length > 1)
+////               r_adon = r_adon.rows(r_adon[0][0]);
+////            rowCache_addon.push({selector: 'pckg_all_addon', row: r_adon}); 
+////        });        
+////        pckg_all_addon.on('mouseup', addon_mouseUp);
+//     //<-------------------- DRAG AND DROP ADDON---------------------->
+//         
+//         
+//        
+//        
+//        
+//       //<----------- ON SUBMIT SUM UP THE PRODUCT PRICE AND DISCOUNT --------->
+//        $('#submit').on('click', function (e) {
+//            var package_price = 0;
+//             
+//            $('.service_amount').each(function () {
+//                package_price += parseInt($(this).val());
+//                $('#package_price').val(package_price);
+//            }); 
+//
+//        }); //<------ ON SUBMIT SUM UP THE PRODUCT PRICE AND DISCOUNT --------->
+//
+//
+//    });
+//
+//    $(document).ready(function () {    
+//        //<-------------------------- PACKAGE SELECTED SERVICE ------------------------------>     
+////        var packg_selected_service = $('#packg_selected_service').DataTable({   //<------------------ PACKAGE SELECTED SERVICE ----------------->
+////            
+////            //<--------------- ON EDIT GET SELECTED SERVICES OF PRODUCT ---------------------->
+////            <?php if($edit_id) { ?>
+//                "ajax": {
+//                    "url": "<?php echo site_url($this->uri->segment(1).'/get_selected_services'); ?>",
+//                    "method": "POST",
+//                    "data": function (d) {
+//                        d.package_id = '<?= $edit_id; ?>';
+//                    }
+//                }, 
+//                "ordering": false, 
+            <?php } ?> 
+//                "searching": false,
+//                "paging": false,
+            //<--------------- ON EDIT GET SELECTED SERVICES OF PRODUCT ---------------------->
+            
+            
+//            columns: [{
+//                    data: 'service_name',
+//                    "render": function (data, type, full, meta) {  
+//                        return "<td>" + full.service_name + "<input type='hidden' name='selected_service_id[]' value='" + full.service_id + "'> </td>";
+////                    }
+////                }, {
+////                    data: 'action'
+////                }]
+////        });
+//        
+//        $("#packg_selected_service").delegate(".del_selected_service", "click", function () {
+//            var text = $(this).parent().siblings(":first").text();
+//            var id = $(this).attr('id'); // GET RECORD ID 
+//            var temp_id_1 = $(this).attr('data-id'); // GET ID REMOVE ON CREATE 
+//            
+//            if(id) {  // <---------------- IF SELECTED SERVICE RECORD IS SAVED IN DB THEN PRIMARY ID WILL BE TRUE ----------------->
+//               
+//             swal({
+//                 title: "Are you sure?",
+//                 text: "Record will be Deleted!",
+//                 type: "warning",
+//                 showCancelButton: true,
+//                 confirmButtonClass: "btn-danger",
+//                 confirmButtonText: "Yes, delete it!",
+//                 cancelButtonText: "No, Cancel!",
+//                 closeOnConfirm: false,
+//                 closeOnCancel: false
+//             },
+//             function (isConfirm) {
+//                 if (isConfirm) {
+//                     $.ajax({
+//                         type: 'POST',
+//                         url: '<?php echo site_url($this->uri->segment(1) . '/delete_selected_service'); ?>',
+//                         data: {id: id},
+//                         dataType: 'json',
+//                         success: function (data) {
+//                             if (data.success === 'yes') {
+//                                 swal('Record Successfully Deleted', "", "success"); 
+//                                 packg_selected_service.ajax.reload();
+//                             } else {
+//                                 swal(data.msg, "", "error");
+//                             }
+//                         }
+//                     }); 
+//                 } else {                   
+//                    swal("Cancelled", "Delete Cancelled", "error");
+//                 }
+//             });
+//                
+//                
+//            } else { //<---------------- IF SELECTED SERVICE RECORD IS DRAGGED AND DROPPED THEN PRIMARY ID WOULD BE FALSE ----------------->
+//               // <---------------------- REMOVE FROM UNIQUE ADDON ARRAY -------------------->
+//                service_unique = jQuery.grep(service_unique, function(value) {
+//                    return value != temp_id_1;
+//                }); // <--------------- REMOVE FROM UNIQUE ADDON ARRAY ----------------------->
+//                
+//                packg_selected_service.row( $(this).parents('tr') ).remove().draw();  
+//            } 
+//            
+//        });   
+//        //<-------------------------- PACKAGE SELECTED SERVICE ------------------------------>     
+//        
+//        
+//
+//        //<----------------------------- PACKAGE SELECTED ADDON ---------------------------> 
+////        var pckg_selected_addon = $('#pckg_selected_addon').DataTable({   
+////            
+////            //<--------------- ON EDIT GET SELECTED SERVICES OF PRODUCT ---------------------->
+//            <?php if($edit_id) { ?>
+//                "ajax": {
+//                    "url": "<?php echo site_url($this->uri->segment(1).'/get_selected_addon'); ?>",
+//                    "method": "POST",
+//                    "data": function (d) {
+//                        d.package_id = '<?= $edit_id; ?>';
+//                    }
+//                }, 
+//                "ordering": false, 
+//            <?php } ?> 
+//                "searching": false,
+//                "paging": false,
+            //<--------------- ON EDIT GET SELECTED SERVICES OF PRODUCT ---------------------->
+            
+            
+//            columns: [{
+//                data: 'service_name',
+//                "render": function (data, type, full, meta) {  
+//                    return "<td>" + full.service_name + "<input type='hidden' name='addon_service_id[]' value='" + full.service_id + "'> </td>";
+////                }
+////            }, {
+////                data: 'action'
+////            }]
+////        });
+//        
+//        $("#pckg_selected_addon").delegate(".delete_addon", "click", function () {
+//            var text = $(this).parent().siblings(":first").text(); 
+//            var id = $(this).attr('id'); // GET RECORD ID 
+//            var temp_id_2 = $(this).attr('data-id'); // GET ID REMOVE ON CREATE 
+//            
+//            if(id) {  // <---------------- IF SELECTED SERVICE RECORD IS SAVED IN DB THEN PRIMARY ID WILL BE TRUE ----------------->
+//               
+//             swal({
+//                 title: "Are you sure?",
+//                 text: "Record will be Deleted!",
+//                 type: "warning",
+//                 showCancelButton: true,
+//                 confirmButtonClass: "btn-danger",
+//                 confirmButtonText: "Yes, delete it!",
+//                 cancelButtonText: "No, Cancel!",
+//                 closeOnConfirm: false,
+//                 closeOnCancel: false
+//             },
+//             function (isConfirm) {
+//                 if (isConfirm) {
+//                     $.ajax({
+//                         type: 'POST',
+//                         url: '<?php echo site_url($this->uri->segment(1) . '/delete_selected_service'); ?>',
+//                         data: {id: id},
+//                         dataType: 'json',
+//                         success: function (data) {
+//                             if (data.success === 'yes') {
+//                                 swal('Record Successfully Deleted', "", "success"); 
+//                                 table.ajax.reload();
+//                             } else {
+//                                 swal(data.msg, "", "error");
+//                             }
+//                         }
+//                     }); 
+//                 } else {                   
+//                    swal("Cancelled", "Delete Cancelled", "error");
+//                 }
+//             });
+//                
+//                
+//            } else { //<---------------- IF SELECTED SERVICE RECORD NOT COMMING FROM DB ----------------->
+//                
+//                // <---------------------- REMOVE FROM UNIQUE ADDON ARRAY -------------------->
+//                addon_unique = jQuery.grep(addon_unique, function(value) {
+//                    return value != temp_id_2;
+//                }); // <--------------- REMOVE FROM UNIQUE ADDON ARRAY ----------------------->
+//                
+//                pckg_selected_addon.row( $(this).parents('tr') ).remove().draw();  
+//                
+//            } 
+//            
+//        });   
+//        
+//        //<----------------------------- PACKAGE SELECTED ADDON ---------------------------> 
+//        
+//       
+//        
+//    });
+    
+     //<--------------- THIS FUNCTION SEND DRAG ROW ARRAY TO SELECTED SERVICE TABLE--------------------->
+//    function service_mouseUp(event) { 
+//    
+//        var id = $(document.elementsFromPoint(event.clientX, event.clientY)).filter('table').attr('id');
+//
+//        if (id && event.currentTarget.id != id){
+//             
+//            rowCache_service.every(function (el, i) {
+//                if (el.selector != id) {
+//                    var data = el.row.data(); 
+//                     
+//                   
+//                     //<--------------- TO CHECK THE DUPLICATE SERVICE NAME IN SELECTED SERVICE ----------->
+//                    for (var z = 0; z < service_unique.length; z++) {
+//                        if (data[0].service_id == service_unique[z]) {
+//                            swal('', 'Service Already Exist', 'error');
+//                            return false;
+//                        }
+//                    }//<--------------- TO CHECK THE DUPLICATE SERVICE NAME IN SELECTED SERVICE ----------->
+//
+//                    if (data.length > 0) { 
+//                        
+//                        service_unique.push(data[0].service_id);  
+//                        
+//                        if (!data[0].action)
+//                            data[0].action = "<a class='btn btn-danger del_selected_service' data-id='"+data[0].service_id+"'><i class='icon_close_alt2'></i></a>";
+//
+//                        var $target = $("#packg_selected_service").DataTable();
+//                        $target.rows.add(data.toArray()).draw();
+//
+//                    }
+//                    
+//                }
+//            });
+//             rowCache_service = [];
+//        } 
+//
+//    }
+//    
+//    
+//    
+//    function addon_mouseUp(event) { 
+//    
+//        var id = $(document.elementsFromPoint(event.clientX, event.clientY)).filter('table').attr('id');
+//
+//        if (id && event.currentTarget.id != id){
+//             
+//            rowCache_service.every(function (el, i) {
+//                if (el.selector != id) {
+//                    var data = el.row.data(); 
+//                     
+//                    console.log(data);
+//                     //<--------------- TO CHECK THE DUPLICATE SERVICE NAME IN SELECTED SERVICE ----------->
+//                    for (var z = 0; z < addon_unique.length; z++) {
+//                        if (data[0].service_id == addon_unique[z]) {
+//                            swal('', 'Addon Already Exist', 'error');
+//                            return false;
+//                        }
+//                    }//<--------------- TO CHECK THE DUPLICATE SERVICE NAME IN SELECTED SERVICE ----------->
+//
+//                    if (data.length > 0) { 
+//                        
+//                        addon_unique.push(data[0].service_id);
+//                         
+//                        if (!data[0].action)
+//                            data[0].action = "<a class='btn btn-danger delete_addon' data-id='"+data[0].service_id+"'><i class='icon_close_alt2'></i></a>";
+//
+//                        var $target = $("#pckg_selected_addon").DataTable();
+//                        $target.rows.add(data.toArray()).draw();
+//
+//                    }
+//                    
+//                }
+//            });
+//             rowCache_service = [];
+//        } 
+//
+//    }
+//    
+ 
