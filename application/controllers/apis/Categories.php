@@ -9,7 +9,7 @@
   
 require_once APPPATH.'libraries/api/REST_Controller.php';
 
-class User extends REST_Controller
+class Categories extends REST_Controller
 {
     const api_message_key = "AIzaSyDLwcHk93UVYSGtp-eDNi2RvnGDPoCDnNU";
     
@@ -18,19 +18,15 @@ class User extends REST_Controller
         parent::__construct();
         
     }
-    /*
-     * Mehtod:   		add_subject
-     * Params: 			.....
-     * Description:             .....
-     * Returns: 		.....
-     */ 
      
-    public function Login_post() {   
-        $data = $this->_post_args;
+    
+    public function Categories_all_get() {   
+        $data = $this->_get_args;
+        
         try {
-            $this->load->library("api/User_lib");
-            $s = new User_lib;
-            $result = $s->Login_user($data);
+            $this->load->library("api/Categories_lib");
+            $s = new Categories_lib;
+            $result = $s->Categories($data);
         }
         catch(Exception $e)
         {
@@ -42,7 +38,6 @@ class User extends REST_Controller
         $this->response($result[0], $result[1]);
     } 
     
-      
     
      
 }
